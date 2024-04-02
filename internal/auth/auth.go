@@ -181,10 +181,12 @@ func ReadPasswordWithOTP() (string, string, error) {
 		pass := strings.Trim(stdinScanner.Text(), "\x00")
 
 		// Extract the password and OTP from the input string
+		// changed here to make it work when password contains slashes. WILL NOT WORK if no OTP is specified and password contains slashes!
+		
 		if strings.Contains(pass, "/") {
-			creds := strings.Split(pass, "/")
-			password = creds[0]
-			otp = creds[1]
+			//LastIndex will return position of LAST slash in string; returns password before the "/" and otp after this position 
+			password = pass[:strings.LastIndex(pass, "/")]
+			otp = pass[strings.LastIndex(pass, "/")+1:]
 		} else {
 			password = pass
 			otp = ""
